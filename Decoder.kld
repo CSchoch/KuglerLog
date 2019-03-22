@@ -1,0 +1,263 @@
+
+
+function UDTToString(strUDT : String; Data : TIdBytes; start : Integer) : String;
+var
+  UDTStringList : TStringList;
+  K, n : Integer;
+  BoolStrings : array [0 .. 1] of String;
+begin
+  BoolStrings[0] := 'FALSE';
+  BoolStrings[1] := 'TRUE';
+  UDTStringList := TStringList.create;
+  UDTStringList.Delimiter := ';';
+  UDTStringList.DelimitedText := strUDT;
+
+  for K := 0 to pred(UDTStringList.Count) do
+    If Pos(UDTStringList[K], '[') > 0 Then
+    begin
+      IF Copy(UDTStringList[K], 1, 6) = 'STRING' Then
+      begin
+        n := StrToInt(Copy(UDTStringList[K], 7, Length(UDTStringList[K]) - 1));
+        Result := Result + GetString(Data, start, n) + #13#10;
+        start := start + n;
+      end;
+    end
+    Else
+      case UDTStringList.Strings[K] of
+        'BOOL' :
+          begin
+            Result := Result + BoolStrings[Data[start]] + #13#10;
+            start := start + 1;
+          end;
+        'BYTE' :
+          begin
+            Result := Result + IntToStr(Data[start]) + #13#10;
+            start := start + 1;
+          end;
+        'WORD' :
+          begin
+            Result := Result + IntToStr(GetWord(Data, start)) + #13#10;
+            start := start + 2;
+          end;
+        'DWORD' :
+          begin
+            Result := Result + IntToStr(GetDWord(Data, start)) + #13#10;
+            start := start + 4;
+          end;
+        'SINT' :
+          begin
+            Result := Result + IntToStr(GetSint(Data, start)) + #13#10;
+            start := start + 1;
+          end;
+        'USINT' :
+          begin
+            Result := Result + IntToStr(GetUSint(Data, start)) + #13#10;
+            start := start + 1;
+          end;
+        'INT' :
+          begin
+            Result := Result + IntToStr(GetInt(Data, start)) + #13#10;
+            start := start + 2;
+          end;
+        'UINT' :
+          begin
+            Result := Result + IntToStr(GetUInt(Data, start)) + #13#10;
+            start := start + 2;
+          end;
+        'DINT' :
+          begin
+            Result := Result + IntToStr(GetDInt(Data, start)) + #13#10;
+            start := start + 4;
+          end;
+        'UDINT' :
+          begin
+            Result := Result + IntToStr(GetUDInt(Data, start)) + #13#10;
+            start := start + 4;
+          end;
+        'REAL' :
+          begin
+            Result := Result + FloatToStr(GetReal(Data, start)) + #13#10;
+            start := start + 4;
+          end;
+        'LREAL' :
+          begin
+            Result := Result + FloatToStr(GetLReal(Data, start)) + #13#10;
+            start := start + 8;
+          end;
+        'TIME' :
+          begin
+            Result := Result + TimeToStr(GetTime(Data, start)) + #13#10;
+            start := start + 4;
+          end;
+        'DATE' :
+          begin
+            Result := Result + DateTimeToStr(GetDate(Data, start)) + #13#10;
+            start := start + 4;
+          end;
+        'TOD' :
+          begin
+            Result := Result + DateTimeToStr(GetTimeOfDay(Data, start)) + #13#10;
+            start := start + 4;
+          end;
+        'DT' :
+          begin
+            Result := Result + DateTimeToStr(GetDateTime(Data, start)) + #13#10;
+            start := start + 8;
+          end;
+      end;
+  UDTStringList.free;
+end;
+
+// This function is called if new data arives
+function DataToString(i_Datatyp : Integer; Data : TIdBytes) : String;
+var
+  i,j : integer;
+  e : Extended;
+  dt : TDateTime;
+  t : Cardinal;
+  BoolStrings : array[0..1] of String;
+  s : String;
+begin
+  BoolStrings[0] := 'FALSE';
+  BoolStrings[1] := 'TRUE';
+  case i_Datatyp of
+  2:
+    begin
+      Result := '';
+      Result := Result + 'b_Test: ' + BoolStrings[Data[0]] + #13#10;
+
+      i := GetInt(Data, 1);
+      Result := Result + 'i_Test: ' + IntToStr(i) + #13#10;
+
+      i := GetDInt(Data, 3);
+      Result := Result + 'di_Test: ' + IntToStr(i) + #13#10;
+
+      s := GetString(Data, 7, 10);
+      Result := Result + 'str_Test: ' + s + #13#10;
+      
+      e := GetReal(Data, 19);
+      Result := Result + 'r_Test: ' + FloatToStr(e) + #13#10;
+
+      e := GetLReal(Data, 23);
+      Result := Result + 'lr_Test: ' + FloatToStr(e) + #13#10;
+
+      dt := GetDateTime(Data, 31);
+      Result := Result + 'dt_Test: ' + DateTimeToStr(dt) + #13#10;
+
+      dt := GetDate(Data, 39);
+      Result := Result + 'd_Test: ' + DateTimeToStr(dt) + #13#10;
+
+      dt := GetTimeOfDay(Data, 43);
+      Result := Result + 'tod_Test: ' + TimeToStr(dt) + #13#10;
+  
+      t := GetTime(Data, 47);
+      Result := Result + 't_Test: ' + SimotionTimeToString(t) + #13#10;
+    end;
+  3:
+    begin
+      Result := '';
+      
+      i := GetUInt(Data, 0);
+      Result := Result + 'ui_InspectionID: ' + IntToStr(i) + #13#10;
+      
+      e := GetReal(Data, 2);
+      Result := Result + 'r_TareWeight: ' + FloatToStr(e) + #13#10;
+      
+      e := GetReal(Data, 6);
+      Result := Result + 'r_IntermediateWeight: ' + FloatToStr(e) + #13#10;
+      
+      e := GetReal(Data, 10);
+      Result := Result + 'r_NettoWeight: ' + FloatToStr(e) + #13#10;
+
+      e := GetReal(Data, 14);
+      Result := Result + 'r_SetWeightTuDoser: ' + FloatToStr(e) + #13#10;
+      
+      e := GetReal(Data, 18);
+      Result := Result + 'r_FillingDegreePreDoser: ' + FloatToStr(e) + #13#10;
+      
+      e := GetReal(Data, 22);
+      Result := Result + 'r_FillingDegreeTuDoser: ' + FloatToStr(e) + #13#10;
+      
+      Result := Result + 'b_TareTriggered: ' + BoolStrings[Data[26]] + #13#10;
+
+      i := GetDInt(Data, 27);
+      Result := Result + 'e_Sample: ' + IntToStr(i) + #13#10;
+      
+      Result := Result + 'b_SoftRimPlaced: ' + BoolStrings[Data[31]] + #13#10;
+      
+      Result := Result + 'b_TopTainerPlaced: ' + BoolStrings[Data[32]] + #13#10;
+      
+      Result := Result + 'b_ForceReject: ' + BoolStrings[Data[33]] + #13#10;
+      
+      Result := Result + 'b_PuckPresent: ' + BoolStrings[Data[34]] + #13#10;
+      
+      s := GetString(Data, 35, 20);
+      Result := Result + 'str_PrintDataLine_1: ' + s + #13#10;
+      
+      s := GetString(Data, 57, 20);
+      Result := Result + 'str_PrintDataLine_2: ' + s + #13#10;
+      
+      s := GetString(Data, 79, 20);
+      Result := Result + 'str_ReadDataLine_1: ' + s + #13#10;
+      
+      s := GetString(Data, 101, 20);
+      Result := Result + 'str_ReadDataLine_2: ' + s + #13#10;
+
+      dt := GetDateTime(Data, 123);
+      Result := Result + 'dt_ObjectFilled: ' + DateTimeToStr(dt) + #13#10;
+      
+      e := GetReal(Data, 131);
+      Result := Result + 'r_Temperature: ' + FloatToStr(e) + #13#10;
+
+      for j := 0 to 3 do
+      begin
+        i := GetDWord(Data, 135 + (j * 4));
+        Result := Result + 'adw_UltrasonicActFaultNumber[' + IntToStr(j) + '] : ' + IntToStr(i) + #13#10;
+      end;
+      
+      for j := 0 to 3 do
+      begin
+        i := GetDWord(Data, 151 + (j * 4));
+        Result := Result + 'adw_UltrasonicActAmplitude[' + IntToStr(j) + '] : ' + IntToStr(i) + #13#10;
+      end;
+      
+      for j := 0 to 3 do
+      begin
+        i := GetDWord(Data, 167 + (j * 4));
+        Result := Result + 'adw_UltrasonicActWeldingPower[' + IntToStr(j) + '] : ' + IntToStr(i) + #13#10;
+      end;
+      
+      for j := 0 to 3 do
+      begin
+        i := GetDWord(Data, 183 + (j * 4));
+        Result := Result + 'adw_UltrasonicActWeldingEnergy[' + IntToStr(j) + '] : ' + IntToStr(i) + #13#10;
+      end;
+      
+      for j := 0 to 3 do
+      begin
+        i := GetDWord(Data, 199 + (j * 4));
+        Result := Result + 'adw_UltrasonicActWeldingTime[' + IntToStr(j) + '] : ' + IntToStr(i) + #13#10;
+      end;
+      
+      for j := 0 to 3 do
+      begin
+        i := GetDWord(Data, 215 + (j * 4));
+        Result := Result + 'adw_UltrasonicActWeldingFrequency[' + IntToStr(j) + '] : ' + IntToStr(i) + #13#10;
+      end;
+
+      i := GetInt(Data, 231);
+      Result := Result + 'i_RejectCode: ' + IntToStr(i) + #13#10;
+      
+      i := GetInt(Data, 233);
+      Result := Result + 'i_ObjectCode: ' + IntToStr(i) + #13#10;
+    
+    end; 
+    
+    4:   
+      UDTToString('UDT_DataStore_Element ;UDT_RUID ;BYTE;BYTE;BYTE;BYTE;BYTE;BYTE;BYTE;BYTE;STRING[20];DWORD;ARRAY [1..10] OF UDT_ProcessData ;UDT_ProcessData ;INT;DT;DT;DINT;DINT;INT;INT;UDT_ProcessData ;INT;DT;DT;DINT;DINT;INT;INT;UDT_ProcessData ;INT;DT;DT;DINT;DINT;INT;INT;UDT_ProcessData ;INT;DT;DT;DINT;DINT;INT;INT;UDT_ProcessData ;INT;DT;DT;DINT;DINT;INT;INT;UDT_ProcessData ;INT;DT;DT;DINT;DINT;INT;INT;UDT_ProcessData ;INT;DT;DT;DINT;DINT;INT;INT;UDT_ProcessData ;INT;DT;DT;DINT;DINT;INT;INT;UDT_ProcessData ;INT;DT;DT;DINT;DINT;INT;INT;UDT_ProcessData ;INT;DT;DT;DINT;DINT;INT;INT;ARRAY [1..10] OF BYTE ;BYTE;BYTE;BYTE;BYTE;BYTE;BYTE;BYTE;BYTE;BYTE;BYTE', Data, 0);
+  end;
+  
+end;  
+
+
+

@@ -1,0 +1,43 @@
+function DataToString(i_Datatyp : Integer; Data : TIdBytes) : String;
+var
+  i : integer;
+  e : Extended;
+  dt : TDateTime;
+  t : Cardinal;
+  BoolStrings : array[0..1] of String;
+  s : String;
+begin
+  BoolStrings[0] := 'FALSE';
+  BoolStrings[1] := 'TRUE';
+
+  Result := '';
+  Result := Result + 'b_Test: ' + BoolStrings[Data[0]] + #13#10;
+
+  i := GetInt(Data, 1);
+  Result := Result + 'i_Test: ' + IntToStr(i) + #13#10;
+
+  i := GetDInt(Data, 3);
+  Result := Result + 'di_Test: ' + IntToStr(i) + #13#10;
+
+  s := GetString(Data, 9, 10);
+  Result := Result + 'str_Test: ' + s + #13#10;
+
+  e := GetReal(Data, 19);
+  Result := Result + 'r_Test: ' + FloatToStr(e) + #13#10;
+
+  e := GetLReal(Data, 23);
+  Result := Result + 'lr_Test: ' + FloatToStr(e) + #13#10;
+
+  dt := GetDateTime(Data, 31);
+  Result := Result + 'dt_Test: ' + DateTimeToStr(dt) + #13#10;
+
+  dt := GetDate(Data, 39);
+  Result := Result + 'd_Test: ' + DateTimeToStr(dt) + #13#10;
+
+  dt := GetTimeOfDay(Data, 43);
+  Result := Result + 'tod_Test: ' + TimeToStr(dt) + #13#10;
+  
+  t := GetTime(Data, 47);
+  Result := Result + 't_Test: ' + SimotionTimeToString(t) + #13#10;
+end;
+
