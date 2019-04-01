@@ -416,6 +416,7 @@ IMPLEMENTATION
 // Aenderungsdatum  :
 //
 //----------------------------------------------------------------------------------------    
+		s_Unit_Data_Set_Cmd.handle := 0;
         b_StoreData := TRUE;
         
     END_FUNCTION
