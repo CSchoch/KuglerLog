@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio Version=4.3.6.57 SP?>
+<Package xmlns="http://br-automation.co.at/AS/Package">
+  <Objects>
+    <Object Type="Library" Language="IEC">DebComLib</Object>
+    <Object Type="Program" Language="IEC">DebugComCycle</Object>
+  </Objects>
+  <Dependencies>
+    <Dependency ObjectName="TCPComLib" />
+  </Dependencies>
+</Package>

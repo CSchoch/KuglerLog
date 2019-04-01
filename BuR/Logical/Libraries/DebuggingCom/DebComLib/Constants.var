@@ -1,0 +1,15 @@
+VAR CONSTANT
+	ui_Header_Length            : UINT := 6;          (* STX(1) + Laufnummer(1) + Trennbyte(1) + Telegrammtyp(2) + Trennbyte(1) *)
+	ui_Footer_Length            : UINT := 1;          (* ETX(1) *)
+	ui_Data_Length_String       : UINT := 90;         (* Zeit(4) + Trennbyte(1) + Datum(4) + Trennbyte(1) + Text(80) *)
+	ui_Data_Length_Data         : UINT := 1449;       (* Zeit(4) + Trennbyte(1) + Datum(4) + Trennbyte(1) + Text(80) + Trennbyte(1) + Datentyp(2) + Trennbyte(1) + Daten(1355) *)
+	ui_Data_Length_Pure_Data    : UINT := 1355;       
+        
+	ui_SendDataLength_Debug     : UINT := ui_Header_Length + ui_Data_Length_String + ui_Footer_Length;
+	ui_SendDataLength_Data      : UINT := ui_Header_Length + ui_Data_Length_Data + ui_Footer_Length;
+	ui_RecDataLength_Quit       : UINT := ui_Header_Length + ui_Footer_Length; (* Quittierung erfolgt über Telegrammnummer *)
+        
+	ui_Max_Send_DataSize        : UINT := ui_SendDataLength_Data; (* Muss gröster Datenlänge entsprechen die gesendet werden soll *)
+        
+	ui_Buffer_Size              : UINT := 200; (* Größe des in der Steuerung gehaltenen Logs *) 
+END_VAR
