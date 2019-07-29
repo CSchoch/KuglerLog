@@ -47,13 +47,14 @@ FUNCTION_BLOCK CyclicOperations
 				b_Acknowledge := FALSE;
                         
 			ELSE
-				IF NOT b_Sending AND NOT b_Communicate AND NOT b_Wait_Ack AND Instance.Data.i_SendPointer >= 0 THEN
-					MakeData(
-					Data := Instance.Data.Data[Instance.Data.i_SendPointer]
+                IF NOT b_Sending AND NOT b_Communicate AND NOT b_Wait_Ack AND Instance.Data.Size > 0 THEN
+                    i_Temp := (Instance.Data.Index + (-(Instance.Data.Size) + ui_Buffer_Size)) MOD ui_Buffer_Size;
+                    MakeData(
+					Data := Instance.Data.Data[i_Temp]
 					,aby_Result := aby_Temp
 					);
                             
-					IF Instance.Data.Data[Instance.Data.i_SendPointer].e_DataType = E_STRING THEN
+					IF Instance.Data.Data[i_Temp].e_DataType = E_STRING THEN
 						MakeSendData(
 							ui_DataLength := ui_Data_Length_String
 							,usi_lfd_Nr := GetNextTelegramNo(usi_Lfd_Nr_Send)
@@ -76,7 +77,7 @@ FUNCTION_BLOCK CyclicOperations
 					b_Communicate := TRUE;
 					b_Wait_Ack := TRUE;
                                 
-					Instance.Data.i_SendPointer := Instance.Data.i_SendPointer - 1;
+					Instance.Data.Size := Instance.Data.Size - 1;
                             
 					e_StepSend := STEP_WAIT_FOR_ACK;                             
 				ELSIF b_Wait_Ack THEN

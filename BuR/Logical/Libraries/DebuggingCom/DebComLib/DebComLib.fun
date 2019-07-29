@@ -28,7 +28,8 @@ FUNCTION_BLOCK CyclicOperations (* *) (*$GROUP=User,$CAT=User,$GROUPICON=User.pn
 		usi_Lfd_Nr_Send      : USINT                  ;
 		usi_Lfd_Nr_Rec       : USINT                  ;
 		rt_Count_Send       : R_TRIG                ;
-		ton_SendCycle       : TON                   ;
+        ton_SendCycle       : TON                   ;
+        i_Temp              : INT                   ;
 		            
 		e_StepSend         : e_DebugStepSend        ;
 		e_OldStepSend      : e_DebugStepSend        ;
@@ -62,8 +63,7 @@ FUNCTION_BLOCK Add_Debug_String (*//======= Add_Debug_String ===================
 		str_Text : STRING[80];
 	END_VAR
 	VAR
-		i : UINT;
-		realtime : DTStructureGetTime;
+        realtime : DTStructureGetTime;
 		ActTime : DTStructure;
 	END_VAR
 END_FUNCTION_BLOCK
@@ -96,8 +96,7 @@ FUNCTION_BLOCK Add_Debug_Data (*//======= Add_Debug_Data =======================
 		ui_DataSize : UINT;
 	END_VAR
 	VAR
-		i : UINT;
-		realtime : DTStructureGetTime;
+        realtime : DTStructureGetTime;
 		ActTime : DTStructure;
 	END_VAR
 END_FUNCTION_BLOCK
@@ -133,9 +132,7 @@ FUNCTION MakeData : USINT
 		i_Temp : INT;
 		by_Temp : BYTE;
 		tod_Temp : TIME_OF_DAY;
-		dt_Temp : DATE;
 		udi_Temp : UDINT;
-		di_Temp : DINT;
 	END_VAR
         
 		END_FUNCTION
@@ -181,8 +178,6 @@ FUNCTION MakeSendData : USINT
 	END_VAR
         
 	VAR
-		ui_pointer : UINT;
-		ui_last_index : UINT;
 		by_Temp     : BYTE;
 		i_Temp : INT;
 	END_VAR
