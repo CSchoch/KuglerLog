@@ -22,24 +22,26 @@ TYPE
 		str_Description : STRING[80];
 		i_DataType : INT;
 		aby_Data : ARRAY[0..ui_Data_Length_Pure_Data] OF BYTE;
-	END_STRUCT;
+    END_STRUCT;
         
 	s_DebugDataBufferType : STRUCT
 		Data : ARRAY[0..ui_Buffer_Size] OF s_DebugDataType;
-		i_SendPointer : INT := -1;
+        Size : INT := 0;
+        Index : INT := 0;
 	END_STRUCT;
 
-	
-	s_DebuggingComType : STRUCT
-		b_init : BOOL := TRUE; (* Initialisierung *)
-		b_Connected : BOOL;
-		b_Error : BOOL;
-		b_Enable_Com : BOOL := TRUE;
-		Data : s_DebugDataBufferType;
-		AddString : Add_Debug_String;
-		AddData : Add_Debug_Data;
-		Internal : s_DebugIternalType;
-	END_STRUCT;
+    s_DebuggingComType : STRUCT
+        b_init : BOOL := TRUE; (* Initialisierung *)
+        b_Connected : BOOL;
+        b_Error : BOOL;
+        b_Enable_Com : BOOL := TRUE;
+        Data : s_DebugDataBufferType;
+        AddString : Add_Debug_String;
+        AddData : Add_Debug_Data;
+        TempStr : STRING[80];
+        TempStr2 : STRING[80];
+        Internal : s_DebugIternalType;
+    END_STRUCT;
 	
   s_DebugIternalType : STRUCT
     Cyclic : CyclicOperations;

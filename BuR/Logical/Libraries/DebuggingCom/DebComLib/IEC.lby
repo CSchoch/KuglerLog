@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<?AutomationStudio Version=4.3.6.57 SP?>
-<Library xmlns="http://br-automation.co.at/AS/Library">
+<?AutomationStudio Version=4.5.2.102?>
+<Library Version="1.00.1" SubType="IEC" xmlns="http://br-automation.co.at/AS/Library">
   <Files>
     <File Description="Exported data types">Types.typ</File>
     <File Description="Exported constants">Constants.var</File>
@@ -12,7 +12,7 @@
   </Files>
   <Dependencies>
     <Dependency ObjectName="astime" />
-    <Dependency ObjectName="asstring" />
+    <Dependency ObjectName="AsBrStr" />
     <Dependency ObjectName="TCPComLib" />
   </Dependencies>
 </Library>
